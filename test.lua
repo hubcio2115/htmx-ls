@@ -1,7 +1,7 @@
-local util = require("lspconfig.util")
-
 local root_files = { "Cargo.toml" }
 local htmx_path = "/Users/hubertkowalski/Documents/Projects/htmx-ls/target/release/htmx-ls"
+
+vim.lsp.set_log_level("debug")
 
 local function setup()
   return {
