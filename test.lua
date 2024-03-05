@@ -1,4 +1,4 @@
-local root_files = { "Cargo.toml" }
+local root_files = { "index.html" }
 local htmx_path = "/Users/hubertkowalski/Documents/Projects/htmx-ls/target/release/htmx-ls"
 
 vim.lsp.set_log_level("debug")
@@ -17,6 +17,5 @@ vim.lsp.start(setup().default_config)
 
 vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(args)
-    print(vim.inspect(args))
   end,
 })
