@@ -11,7 +11,13 @@ struct Backend {
 #[tower_lsp::async_trait]
 impl LanguageServer for Backend {
     async fn initialize(&self, _: InitializeParams) -> Result<InitializeResult> {
-        Ok(InitializeResult::default())
+        Ok(InitializeResult {
+            capabilities: ServerCapabilities {
+                hover_provider: Some(HoverProviderCapability::Simple(true)),
+                ..Default::default()
+            },
+            ..Default::default()
+        })
     }
 
     async fn initialized(&self, _: InitializedParams) {
