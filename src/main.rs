@@ -26,6 +26,13 @@ impl LanguageServer for Backend {
             .await;
     }
 
+    async fn hover(&self, _: HoverParams) -> Result<Option<Hover>> {
+        Ok(Some(Hover {
+            contents: HoverContents::Scalar(MarkedString::String("You're hovering!".to_string())),
+            range: None,
+        }))
+    }
+
     async fn shutdown(&self) -> Result<()> {
         Ok(())
     }
