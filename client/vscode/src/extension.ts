@@ -3,15 +3,15 @@
  * Licensed under the MIT License. See License.txt in the project root for license information.
  * ------------------------------------------------------------------------------------------ */
 
-import { join as pathJoin } from "node:path";
-import { ExtensionContext } from "vscode";
+import { join as pathJoin } from "path";
+import { workspace, ExtensionContext } from "vscode";
 
 import {
   LanguageClient,
   LanguageClientOptions,
   ServerOptions,
   TransportKind,
-} from "vscode-languageclient";
+} from "vscode-languageclient/node";
 
 let client: LanguageClient;
 
@@ -20,26 +20,31 @@ export function activate(context: ExtensionContext) {
   const serverModule = context.asAbsolutePath(
     pathJoin("server", "out", "server.js"),
   );
+
   // If the extension is launched in debug mode then the debug server options are used
   // Otherwise the run options are used
   const serverOptions: ServerOptions = {
-    run: { module: serverModule, transport: TransportKind.ipc },
+    run: { module: serverModule, transport: TransportKind.stdio },
     debug: {
       module: serverModule,
-      transport: TransportKind.ipc,
+      transport: TransportKind.stdio,
     },
   };
 
   // Options to control the language client
   const clientOptions: LanguageClientOptions = {
     // Register the server for plain text documents
-    documentSelector: [{ scheme: "file", language: "html1" }],
+    documentSelector: [{ scheme: "file", language: "html" }],
+    synchronize: {
+      // Notify the server about file changes to '.clientrc files contained in the workspace
+      fileEvents: workspace.createFileSystemWatcher("**/.clientrc"),
+    },
   };
 
   // Create the language client and start the client.
   client = new LanguageClient(
-    "languageServerExample",
-    "Language Server Example",
+    "htmx-ls",
+    "HTMX Language Server",
     serverOptions,
     clientOptions,
   );
@@ -48,9 +53,10 @@ export function activate(context: ExtensionContext) {
   client.start();
 }
 
-export function deactivate(): Thenable<void> | undefined {
+export function deactivate(): Thenable<void> | void {
   if (!client) {
-    return undefined;
+    return;
   }
+
   return client.stop();
 }
