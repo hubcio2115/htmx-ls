@@ -1,6 +1,6 @@
 <div align="center">
-  <a href="https://github.com/ThePrimeagen/htmx-lsp#gh-light-mode-only"><img src="assets/logo.svg#gh-light-mode-only"        width="300px" alt="HTMX-LSP logo"/></a>
-  <a href="https://github.com/ThePrimeagen/htmx-lsp#gh-dark-mode-only"><img src="assets/logo.darkmode.svg#gh-dark-mode-only" width="300px" alt="HTMX-LSP logo"/></a>
+  <a href="https://github.com/ThePrimeagen/htmx-lsp#gh-light-mode-only"><img src="assets/logo.svg#gh-light-mode-only"        width="300px" alt="HTMX-LS logo"/></a>
+  <a href="https://github.com/ThePrimeagen/htmx-lsp#gh-dark-mode-only"><img src="assets/logo.darkmode.svg#gh-dark-mode-only" width="300px" alt="HTMX-LS logo"/></a>
 </div>
 
 ## HTMX-LS
