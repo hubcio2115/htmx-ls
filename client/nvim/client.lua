@@ -15,11 +15,6 @@ local function setup()
 			description = [[
 https://github.com/hubcio2115/htmx-ls
 
-`htmx-lsp` can be installed via `cargo`:
-```sh
-cargo install htmx-ls
-```
-
 Lsp is still very much work in progress and experimental. Use at your own risk.
 ]],
 		},
