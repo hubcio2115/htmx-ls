@@ -29,7 +29,7 @@ After that, would be to perform some code actions that make sense and allow for 
 
 ### Build
 
-```bash
+```shell
 cargo build
 
 # OR auto-build on file save, requires `cargo-watch`
