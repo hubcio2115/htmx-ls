@@ -9,6 +9,14 @@ This is so much a **work in progress**. At this point id does not allow any func
 
 I've made it as my pet project for an OS competition. Hopefully someone will find it useful in the future.
 
+This project's been made for a challenge called [100 commits](https://100commitow.pl/) where participants to encourage participants to work on their pet projects.
+
+## RoadMap
+- [ ] Give hover info for htmx tags
+- [ ] Allow autocomplete for htmx tags
+- [ ] Give suggestions for keywords within htmx tags
+- [ ] Give simple diagnostics about what you should and shouldn't do
+
 ## Integration
 
 ### Neovim
