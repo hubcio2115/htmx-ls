@@ -29,4 +29,4 @@ macro_rules! build_completion {
     };
 }
 
-pub static HX_TAGS: &[HxCompletion] = build_completion!(("hx-post", "htmx/attributes/hx-post.md"));
+pub static HX_TAGS: &[HxCompletion] = build_completion!(("hx-post", "htmx/attributes/hx-post.md"), ("ht-get", "htmx/attributes/hx-get.md"));
