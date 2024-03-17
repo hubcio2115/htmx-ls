@@ -22,7 +22,7 @@ pub fn get_node_on_position(document: &Document, position: Position) -> Option<N
         .named_descendant_for_point_range(point, point);
 }
 
-pub fn node_to_text<'a>(node: &'a Node<'a>, source: &'a str) -> &'a str {
+pub fn node_to_text<'a>(node: &Node<'_>, source: &'a str) -> &'a str {
     return node
         .utf8_text(source.as_bytes())
         .expect("getting text should never fail");
