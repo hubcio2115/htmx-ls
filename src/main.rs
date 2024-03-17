@@ -1,7 +1,6 @@
-use dashmap::DashMap;
-use std::ops::Deref;
-use std::sync::Mutex;
+use std::collections::HashMap;
 use tokio::io::{stdin, stdout};
+use tokio::sync::Mutex;
 use tower_lsp::jsonrpc::{Error, Result};
 use tower_lsp::lsp_types::*;
 use tower_lsp::{Client, LanguageServer, LspService, Server};
@@ -14,7 +13,7 @@ use utils::{get_docs_for_attribute, get_node_on_position, node_to_text, Document
 struct Backend {
     client: Client,
     html_parser: Mutex<Parser>,
-    documents: DashMap<Url, Document>,
+    documents: Mutex<HashMap<Url, Document>>,
 }
 
 #[tower_lsp::async_trait]
@@ -50,9 +49,11 @@ impl LanguageServer for Backend {
         let uri = params.text_document.uri;
         let text = &params.text_document.text;
 
-        let cst = self.html_parser.lock().unwrap().parse(text, None).unwrap();
+        let cst = self.html_parser.lock().await.parse(text, None).unwrap();
 
         self.documents
+            .lock()
+            .await
             .insert(uri, Document::new(cst, text.to_owned()));
     }
 
@@ -62,12 +63,19 @@ impl LanguageServer for Backend {
             .await;
 
         let uri = params.text_document.uri;
-        let text = &params.content_changes[0].text;
+        let text_document = &params.content_changes[0];
 
-        let cst = self.html_parser.lock().unwrap().parse(text, None).unwrap();
+        let cst = self
+            .html_parser
+            .lock()
+            .await
+            .parse(&text_document.text, None)
+            .unwrap();
 
         self.documents
-            .insert(uri, Document::new(cst, text.to_owned()));
+            .lock()
+            .await
+            .insert(uri, Document::new(cst, text_document.text.to_owned()));
     }
 
     async fn hover(&self, params: HoverParams) -> Result<Option<Hover>> {
@@ -78,32 +86,20 @@ impl LanguageServer for Backend {
         let uri = params.text_document_position_params.text_document.uri;
         let position = params.text_document_position_params.position;
 
-        self.client
-            .log_message(
-                MessageType::INFO,
-                format!(
-                    "position: line: {}, character: {}",
-                    position.line, position.character
-                ),
-            )
-            .await;
+        match self.documents.lock().await.get(&uri) {
+            Some(document) => {
+                let node = get_node_on_position(document, position).unwrap();
+                let node_as_text = node_to_text(&node, document.text.as_str());
 
-        let Some(document) = self.documents.get(&uri) else {
-            return Err(Error::parse_error());
-        };
-
-        let node = get_node_on_position(document.deref(), position).unwrap();
-        let node_as_text = node_to_text(&node, document.deref().text.as_str());
-
-        match get_docs_for_attribute(node_as_text) {
-            Some(docs) => Ok(Some(Hover {
-                contents: HoverContents::Markup(MarkupContent {
-                    kind: MarkupKind::Markdown,
-                    value: docs.desc.to_string(),
-                }),
-                range: None,
-            })),
-            None => Ok(None),
+                Ok(get_docs_for_attribute(node_as_text).map(|docs| Hover {
+                    contents: HoverContents::Markup(MarkupContent {
+                        kind: MarkupKind::Markdown,
+                        value: docs.desc.to_string(),
+                    }),
+                    range: None,
+                }))
+            }
+            None => Err(Error::parse_error()),
         }
     }
 
@@ -122,12 +118,12 @@ async fn main() {
         .set_language(tree_sitter_html::language())
         .expect("Error loading html grammar.");
 
-    let documents = DashMap::new();
+    let documents = HashMap::new();
 
     let (service, socket) = LspService::new(|client| Backend {
         client,
         html_parser: Mutex::new(html_parser),
-        documents,
+        documents: Mutex::new(documents),
     });
     Server::new(stdin, stdout, socket).serve(service).await;
 }

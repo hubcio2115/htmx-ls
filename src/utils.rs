@@ -1,7 +1,6 @@
 use tower_lsp::lsp_types::Position;
 use tree_sitter::{Node, Point, Tree};
-
-use crate::constants::{HxCompletion, HTMX_ATTRIBUTES, HX_TAGS};
+use crate::constants::{HxCompletion, HX_TAGS};
 
 pub struct Document {
     pub cst: Tree,
@@ -15,18 +14,12 @@ impl Document {
 }
 
 pub fn get_node_on_position(document: &Document, position: Position) -> Option<Node> {
-    // incrementing position coords by 1 since querying in tree_sitter is 1 based
     let point = Point::new(position.line as usize, position.character as usize);
 
-    let Some(node) = document
+    return document
         .cst
         .root_node()
-        .named_descendant_for_point_range(point, point)
-    else {
-        return None;
-    };
-
-    return Some(node);
+        .named_descendant_for_point_range(point, point);
 }
 
 pub fn node_to_text<'a>(node: &'a Node<'a>, source: &'a str) -> &'a str {
@@ -35,23 +28,14 @@ pub fn node_to_text<'a>(node: &'a Node<'a>, source: &'a str) -> &'a str {
         .expect("getting text should never fail");
 }
 
-pub fn get_docs_for_attribute(attribute: &str) -> Option<HxCompletion> {
-    if HTMX_ATTRIBUTES.contains(&attribute) {
-        let docs = HX_TAGS
-            .iter()
-            .find(|x| x.name == attribute)
-            .cloned()
-            .unwrap();
-        return Some(docs);
-    }
-
-    return None;
+pub fn get_docs_for_attribute(attribute: &str) -> Option<&'static HxCompletion> {
+    HX_TAGS.iter().find(|x| x.name == attribute)
 }
 
 #[cfg(test)]
 mod test {
     use super::*;
-    use tree_sitter::{Parser, Point, Tree};
+    use tree_sitter::Parser;
 
     const HTML_FILE: &str = r#"
         <!doctype html>
