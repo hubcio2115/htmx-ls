@@ -8,7 +8,8 @@ The hx-patch attribute will cause an element to issue a PATCH to the specified U
 
 This example will cause the button to issue a PATCH to /account and swap the returned HTML into the innerHTML of the body.
 
-Notes
+Notes:
+
 hx-patch is not inherited
 You can control the target of the swap using the hx-target attribute
 You can control the swap strategy by using the hx-swap attribute

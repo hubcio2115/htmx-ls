@@ -6,7 +6,7 @@ The hx-get attribute will cause an element to issue a GET to the specified URL a
 
 This example will cause the div to issue a GET to /example and swap the returned HTML into the innerHTML of the div.
 
-Notes
+Notes:
 
 hx-get is not inherited
 By default hx-get does not include any parameters. You can use the hx-params attribute to change this
