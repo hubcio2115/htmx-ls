@@ -33,5 +33,6 @@ pub static HX_TAGS: &[HxCompletion] = build_completion!(
     ("hx-post", "htmx/attributes/hx-post.md"),
     ("hx-get", "htmx/attributes/hx-get.md"),
     ("hx-patch", "htmx/attributes/hx-patch.md"),
-    ("hx-delete", "htmx/attributes/hx-delete.md")
+    ("hx-delete", "htmx/attributes/hx-delete.md"),
+    ("hx-put", "htmx/attributes/hx-put.md")
 );
