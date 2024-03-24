@@ -1,5 +1,5 @@
 local filetypes = { "html", "templ" }
-local htmx_path = "/Users/hubertkowalski/Documents/Projects/htmx-ls/target/release/htmx-ls"
+local htmx_path = "/home/hkowalski/Documents/Projects/htmx-ls/target/release/htmx-ls"
 
 vim.lsp.set_log_level("debug")
 
