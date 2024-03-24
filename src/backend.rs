@@ -151,9 +151,7 @@ mod test {
         // Call `LanguageServer` methods directly, examine internal state, etc.
         assert!(service
             .inner()
-            .initialize(InitializeParams {
-                ..Default::default()
-            })
+            .initialize(InitializeParams::default())
             .await
             .is_ok());
     }
@@ -182,13 +180,6 @@ mod test {
     async fn server_returns_correct_hover_information() {
         let (service, _) = initialize_lsp_service();
 
-        let _ = service
-            .inner()
-            .initialize(InitializeParams {
-                ..Default::default()
-            })
-            .await;
-
         let document_url =
             Url::from_file_path(Path::new("/home/hkowalski/Documents/Projects/htmx-ls")).unwrap();
 
@@ -216,9 +207,7 @@ mod test {
                         uri: document_url.clone(),
                     },
                 },
-                work_done_progress_params: WorkDoneProgressParams {
-                    ..Default::default()
-                },
+                work_done_progress_params: WorkDoneProgressParams::default(),
             })
             .await
             .ok()
