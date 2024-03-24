@@ -1,6 +1,6 @@
+use crate::constants::{HxCompletion, HX_TAGS};
 use tower_lsp::lsp_types::Position;
 use tree_sitter::{Node, Point, Tree};
-use crate::constants::{HxCompletion, HX_TAGS};
 
 pub struct Document {
     pub cst: Tree,
