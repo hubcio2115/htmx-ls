@@ -40,5 +40,6 @@ pub static HX_TAGS: &[HxCompletion] = build_completion!(
     ("hx-confirm", "htmx/attributes/hx-confirm.md"),
     ("hx-disable", "htmx/attributes/hx-disable.md"),
     ("hx-headers", "htmx/attributes/hx-headers.md"),
-    ("hx-encoding", "htmx/attributes/hx-encoding.md")
+    ("hx-encoding", "htmx/attributes/hx-encoding.md"),
+    ("hx-ext", "htmx/attributes/hx-ext.md")
 );
